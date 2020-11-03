@@ -8,8 +8,6 @@ try:
 except ImportError:
     ssl_available = False
 
-print('ssl available ', ssl_available)
-
 from pystashlog.exceptions import (
     StashError, 
     ConnectionError, 
