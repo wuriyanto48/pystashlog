@@ -6,3 +6,6 @@ class ConnectionError(StashError):
 
 class TimeoutError(StashError):
     pass
+
+class ResponseError(StashError):
+    pass
