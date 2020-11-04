@@ -10,6 +10,8 @@ from pystashlog.exceptions import (
     TimeoutError,
 )
 
+from pystashlog.logger import logger as log
+
 class Stash(object):
     def __init__(self, host='localhost', port=5000, socket_type=0,
         socket_timeout=None, socket_connect_timeout=None,
@@ -33,6 +35,7 @@ class Stash(object):
         }
 
         if ssl:
+            log.info('stash uses SSL')
             self.kwargs.update({
                 'ssl_keyfile': ssl_keyfile,
                 'ssl_certfile': ssl_certfile,
@@ -44,11 +47,13 @@ class Stash(object):
         self._create_connection()
     
     def _create_connection(self):
+        log.info('stash creating connection')
         if self.ssl:
             self.connection = SecureConnection(**self.kwargs)
         else:
             self.connection = Connection(**self.kwargs)
         self.connection.connect()
+        log.info('stash client connected to the logstash server')
     
     def write(self, message):
         if isinstance(message, str):
@@ -56,13 +61,16 @@ class Stash(object):
         elif isinstance(message, bytes):
             self.connection.write_bytes(message)
         else:
+            log.error('error: writing message to logstash server')
             raise StashError(INVALID_MESSAGE_TYPE_ERROR)
     
     def release(self):
+        log.info('releasing stash connection')
         if self.connection is None:
             return
         try:
             self.connection.close()
         except OSError as e:
             pass
+        log.info('releasing stash connection succeed')
         self.connection = None

@@ -14,6 +14,8 @@ from pystashlog.exceptions import (
     TimeoutError,
 )
 
+from pystashlog.logger import logger as log
+
 # protocol
 M_CRLF = b'\r\n'
 M_EMPTY = b''
@@ -24,6 +26,13 @@ INVALID_MESSAGE_TYPE_ERROR = 'error: invalid message'
 TIMOUT_WRITING_TO_SOCKET_ERROR = 'error: timeout while writing to socket'
 TIMOUT_READING_FROM_SOCKET_ERROR = 'error: timeout while reading from socket'
 SSL_NOT_AVAILABLE_ERROR = 'error: ssl not available'
+ERROR_CLOSING_CONNECTION = 'error: stash closing connection error'
+
+STATUS_CONNECTING_TO_SERVER = 'connecting stash client to the logstash server'
+STATUS_CONNECTING_TO_SERVER_ERROR = 'error connecting to the logstash server'
+STATUS_CONNECTED_TO_SERVER = 'stash client connected'
+STATUS_CLOSING_SERVER_CONNECTION = 'closing stash connection'
+STATUS_CLOSED_SERVER_CONNECTION = 'closing stash connection succeed'
 
 class Connection:
     def __init__(self, host='localhost', port=5000, socket_type=0,
@@ -85,6 +94,7 @@ class Connection:
             return 'error {0} connecting to {1}:{2}. {3}.'.format(exception.args[0], self.host, self.port, exception.args[1])
     
     def _connect(self):
+        log.info(STATUS_CONNECTING_TO_SERVER)
         err = None
         for addr_info in socket.getaddrinfo(self.host, self.port, self.socket_type, socket.SOCK_STREAM):
             family, socktype, proto, canonname, socket_address = addr_info
@@ -108,9 +118,13 @@ class Connection:
 
                 # set the socket_timeout now that we're connected
                 sock.settimeout(self.socket_timeout)
+
+                log.info(STATUS_CONNECTED_TO_SERVER)
+
                 return sock
 
             except OSError as _:
+                log.error(STATUS_CONNECTING_TO_SERVER_ERROR)
                 err = _
                 if sock is not None:
                     sock.close()
@@ -119,6 +133,7 @@ class Connection:
         raise OSError('socket.getaddrinfo returned an empty list')
     
     def close(self):
+        log.info(STATUS_CLOSING_SERVER_CONNECTION)
         if self._sock is None:
             return
         try:
@@ -127,6 +142,7 @@ class Connection:
             self._sock.close()
         except OSError:
             pass
+        log.info(STATUS_CLOSED_SERVER_CONNECTION)
         self._sock = None
 
     def __del__(self):
