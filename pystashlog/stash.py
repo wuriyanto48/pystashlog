@@ -18,7 +18,6 @@ class Stash(object):
         ssl_certfile=None, ssl_cert_reqs='required', ssl_ca_certs=None,
         ssl_check_hostname=False,
         health_check_interval=0):
-        print('init')
 
         self.ssl = ssl
 
