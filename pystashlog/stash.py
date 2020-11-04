@@ -33,7 +33,6 @@ class Stash(object):
         }
 
         if ssl:
-            print('uses ssl')
             self.kwargs.update({
                 'ssl_keyfile': ssl_keyfile,
                 'ssl_certfile': ssl_certfile,
