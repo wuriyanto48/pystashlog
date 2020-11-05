@@ -32,7 +32,7 @@ setup(
         'Programming Language :: Python :: 3 :: Only',
     ],
     keywords='logstash, elk, elastic, logstash client, kibana',
-    packages=find_packages(where='pystashlog', exclude=('tests', 'env', 'elk')),
+    packages=find_packages(where='pystashlog', exclude=('tests', 'env', 'elk', '_examples')),
     python_requires='>=3.5',
     project_urls={
         'Bug Reports': 'https://github.com/wuriyanto48/pystashlog/issues',
