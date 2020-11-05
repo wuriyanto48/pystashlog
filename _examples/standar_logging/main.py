@@ -1,11 +1,26 @@
 import json
 import datetime
+import logging
 
-from pystashlog import Stash
+import pystashlog
+
+'''
+init logger
+'''
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 def main():
     print('pystashlog')
-    stash = Stash(ssl=False)
+    stash = pystashlog.Stash(
+        ssl=True,
+        ssl_ca_certs='./_examples/secure/tls/server.crt',
+        ssl_keyfile='./_examples/secure/tls/server.key',
+    )
+
+    # set custom handler with stash
+    stash.setLevel(logging.INFO)
+    logger.addHandler(stash)
 
     while True:
         text_input = input('>> ')
@@ -13,7 +28,7 @@ def main():
             break
         try:
             msg = get_message(text_input)
-            stash.write(msg)
+            logger.info(msg)
             # response = con.read()
             # print('response = ', response)
         except Exception as e:

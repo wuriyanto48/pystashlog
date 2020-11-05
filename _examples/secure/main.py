@@ -23,7 +23,7 @@ def main():
         except Exception as e:
             print('error ', e)
     
-    stash.release()
+    stash.disconnect()
 
 def get_message(message):
     json_dict = {
