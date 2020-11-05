@@ -54,15 +54,22 @@ class Stash(StreamHandler):
         self.connection = None
         self._create_connection()
     
+    # create socket connection
     def _create_connection(self):
         log.info('stash creating connection')
+
+        # check if the connection uses SSL
         if self.ssl:
             self.connection = SecureConnection(**self.kwargs)
         else:
+            # default connection without SSL
             self.connection = Connection(**self.kwargs)
+        
+        # call connect function from Connection
         self.connection.connect()
         log.info('stash client connected to the logstash server')
     
+    # write message to socket 
     def write(self, message):
         if isinstance(message, str):
             self.connection.write_str(message)
@@ -84,6 +91,7 @@ class Stash(StreamHandler):
     def close(self):
         self.disconnect()
     
+    # disconnect socket
     def disconnect(self):
         log.info('releasing stash connection')
         if self.connection is None:

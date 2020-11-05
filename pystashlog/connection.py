@@ -27,6 +27,9 @@ STATUS_CONNECTED_TO_SERVER = 'stash client connected'
 STATUS_CLOSING_SERVER_CONNECTION = 'closing stash connection'
 STATUS_CLOSED_SERVER_CONNECTION = 'closing stash connection succeed'
 
+'''
+Connection class represent a socket client
+'''
 class Connection:
     def __init__(self, host='localhost', port=5000, socket_type=0,
         socket_timeout=None, socket_connect_timeout=None,
@@ -50,6 +53,7 @@ class Connection:
         self._connect_callbacks = []
         self._sock = None
 
+    # return connection config info 
     def info(self):
         infos = [
             ('host', self.host),
@@ -64,6 +68,7 @@ class Connection:
     def clear_connect_callbacks(self):
         self._connect_callbacks = []
     
+    # connect to socket
     def connect(self):
         if self._sock:
             return
@@ -125,6 +130,7 @@ class Connection:
             raise err
         raise OSError('socket.getaddrinfo returned an empty list')
     
+    # close socket connection
     def close(self):
         log.info(STATUS_CLOSING_SERVER_CONNECTION)
         if self._sock is None:
@@ -144,6 +150,7 @@ class Connection:
         except Exception:
             pass
     
+    # write string data to socket
     def write_str(self, message):
         if not self._sock:
             self.connect()
@@ -159,6 +166,7 @@ class Connection:
             self.close()
             raise e
 
+    # write bytes data to socket
     def write_bytes(self, message):
         if not self._sock:
             self.connect()
@@ -177,7 +185,8 @@ class Connection:
         except socket.error as e:
             self.close()
             raise ConnectionError('error while writing to socket %s'%(e))
-
+    
+    # read data from socket after write to socket
     def read(self):
         try:
             response = self._sock.recv(self.socket_read_size)

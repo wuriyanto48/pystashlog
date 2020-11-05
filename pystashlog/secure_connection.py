@@ -17,6 +17,9 @@ except ImportError:
 
 STATUS_CONNECTING_TO_SERVER_SECURE = 'connecting stash client to the logstash server with secure connection'
 
+'''
+SecureConnection class represent a secure socket client
+'''
 class SecureConnection(Connection):
 
     def __init__(self, ssl_keyfile=None, ssl_certfile=None,

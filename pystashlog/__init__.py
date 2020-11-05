@@ -9,4 +9,4 @@ from pystashlog.stash import (
 )
 
 __version__ = '1.0.0'
-VERSION = tuple(map(lambda v: int(v), __version__.split('.')))
+VERSION = tuple([int(v) for v in __version__.split('.')])
