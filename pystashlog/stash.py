@@ -1,8 +1,9 @@
 from pystashlog.connection import (
     Connection,
-    SecureConnection,
     INVALID_MESSAGE_TYPE_ERROR,
 )
+
+from pystashlog.secure_connection import SecureConnection
 
 from pystashlog.exceptions import (
     StashError, 
