@@ -1,3 +1,7 @@
+from logging import (
+    StreamHandler
+)
+
 from pystashlog.connection import (
     Connection,
     INVALID_MESSAGE_TYPE_ERROR,
@@ -13,7 +17,7 @@ from pystashlog.exceptions import (
 
 from pystashlog.logger import logger as log
 
-class Stash(object):
+class Stash(StreamHandler):
     def __init__(self, host='localhost', port=5000, socket_type=0,
         socket_timeout=None, socket_connect_timeout=None,
         socket_keepalive_options=None, retry_on_timeout=False,
@@ -21,6 +25,9 @@ class Stash(object):
         ssl_certfile=None, ssl_cert_reqs='required', ssl_ca_certs=None,
         ssl_check_hostname=False,
         health_check_interval=0):
+
+        # call parent's constructor
+        super(Stash, self).__init__()
 
         self.ssl = ssl
 
@@ -65,7 +72,19 @@ class Stash(object):
             log.error('error: writing message to logstash server')
             raise StashError(INVALID_MESSAGE_TYPE_ERROR)
     
-    def release(self):
+    # override emit from logging.StreamHandler
+    def emit(self, record):
+        log_entry = self.format(record)
+        self.write(log_entry)
+
+        # flush
+        self.flush()
+    
+    # override close from logging.StreamHandler -> logging.Handler
+    def close(self):
+        self.disconnect()
+    
+    def disconnect(self):
         log.info('releasing stash connection')
         if self.connection is None:
             return
