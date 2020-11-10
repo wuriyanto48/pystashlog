@@ -16,12 +16,12 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/wuriyanto48/pystashlog',
-    author='telkomdev',
+    author='wuriyanto',
     author_email='wuriyanto48@yahoo.co.id',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
-        'Topic :: Client Library :: TCP :: ELK :: Logstash',
+        'Topic :: Software Development :: Libraries :: Python Modules',
 
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
@@ -32,7 +32,7 @@ setup(
         'Programming Language :: Python :: 3 :: Only',
     ],
     keywords='logstash, elk, elastic, logstash client, kibana',
-    packages=find_packages(where='pystashlog', exclude=('tests', 'env', 'elk', '_examples')),
+    packages=find_packages(exclude=('tests*', 'env', 'elk', '_examples')),
     python_requires='>=3.5',
     project_urls={
         'Bug Reports': 'https://github.com/wuriyanto48/pystashlog/issues',
