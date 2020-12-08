@@ -2,6 +2,13 @@
 
 Logstash client library for `Python Programming Language`
 
+## Manual install
+
+```shell
+$ git clone https://github.com/wuriyanto48/pystashlog.git
+$ python setup.py install
+```
+
 ## Usage
 
 ### Basic
